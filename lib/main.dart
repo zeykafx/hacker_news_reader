@@ -17,11 +17,6 @@ main() async {
 class HackerNewsReaderApp extends StatelessWidget {
   const HackerNewsReaderApp({super.key});
 
-  static final _defaultLightColorScheme = ColorScheme.fromSwatch(primarySwatch: Colors.blue);
-
-  static final _defaultDarkColorScheme = ColorScheme.fromSwatch(primarySwatch: Colors.blue, brightness: Brightness.dark);
-
-
   @override
   Widget build(BuildContext context) {
     return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme){

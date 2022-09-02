@@ -36,7 +36,6 @@ class HackerNewsApi {
   GetStorage box = GetStorage();
 
   Future<void> getTopStories(int maxStoriesToFetch, Function(Item) callback) async {
-    // List<Item> topStories = [];
     int storiesFetched = 0;
 
     try {

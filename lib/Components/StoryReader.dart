@@ -73,13 +73,14 @@ class _StoryReaderState extends State<StoryReader> {
                   bsbController.expand();
                 },
                 icon: const Icon(Icons.arrow_upward)),
-            IconButton(
-                onPressed: () {
-                  controller.future.then((value) {
-                    value.
-                  })
-                },
-                icon: const Icon(Icons.invert_colors_on)),
+            // TODO: add a dark mode button somehow
+            // IconButton(
+            //     onPressed: () {
+            //       controller.future.then((value) {
+            //         value.
+            //       });
+            //     },
+            //     icon: const Icon(Icons.invert_colors_on)),
           ],
         ),
         body: Stack(
