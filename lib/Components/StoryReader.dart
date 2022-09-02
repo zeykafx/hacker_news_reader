@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../models/item.dart';
-import 'navigation_controls.dart';
+import 'NavigationControls.dart';
 
 class StoryReader extends StatefulWidget {
   final Item item;

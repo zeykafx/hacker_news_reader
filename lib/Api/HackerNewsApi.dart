@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:get_storage/get_storage.dart';
 import '../models/item.dart';
 
 class HackerNewsApi {
@@ -32,8 +31,6 @@ class HackerNewsApi {
   /// about:        The user's optional self-description. HTML.
   /// submitted:    List of the user's stories polls and comments.
   String userLink = "https://hacker-news.firebaseio.com/v0/user";
-
-  GetStorage box = GetStorage();
 
   Future<void> getTopStories(int maxStoriesToFetch, Function(Item) callback) async {
     int storiesFetched = 0;

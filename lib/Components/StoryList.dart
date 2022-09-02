@@ -37,6 +37,8 @@ class _StoryListState extends State<StoryList> {
     hackerNewsApi.getTopStories(LIST_LENGTH, getTopStoriesCallBack);
   }
 
+  // TODO: add a page system, and in turns add an index for the fetching
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
