@@ -50,8 +50,8 @@ class HackerNewsApi {
                 itemResponse.data["time"],
                 itemResponse.data["title"] ?? "No title",
                 itemResponse.data["type"] ?? "story",
-                itemResponse.data["url"]??"",
-                itemResponse.data["text"]??"");
+                itemResponse.data["url"] ?? "",
+                itemResponse.data["text"] ?? "");
             callback(item);
             storiesFetched++;
           } catch (e) {
@@ -59,7 +59,6 @@ class HackerNewsApi {
             print(e);
           }
         }
-
       }
     } catch (e) {
       print(e);

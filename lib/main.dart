@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hacker_news_reader/Components/StoryList.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:get_storage/get_storage.dart';
-import 'Api/HackerNewsApi.dart';
-import 'models/item.dart';
 
 main() async {
   await GetStorage.init();
@@ -19,27 +16,26 @@ class HackerNewsReaderApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme){
-        return GetMaterialApp(
-          title: 'Hacker News Reader',
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: lightColorScheme,
-            colorSchemeSeed: lightColorScheme == null ? Colors.blue : null,
-            brightness: Brightness.light,
-            textTheme: GoogleFonts.robotoTextTheme(ThemeData.light().textTheme),
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: darkColorScheme,
-            colorSchemeSeed: darkColorScheme == null ? Colors.blue : null,
-            brightness: Brightness.dark,
-            textTheme: GoogleFonts.robotoTextTheme(ThemeData.dark().textTheme),
-          ),
-          themeMode: ThemeMode.system,
-          home: const StoryList(),
-        );
-      }
-    );
+    return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
+      return GetMaterialApp(
+        title: 'Hacker News Reader',
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: lightColorScheme,
+          colorSchemeSeed: lightColorScheme == null ? Colors.blue : null,
+          brightness: Brightness.light,
+          textTheme: GoogleFonts.robotoTextTheme(ThemeData.light().textTheme),
+        ),
+        darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: darkColorScheme,
+          colorSchemeSeed: darkColorScheme == null ? Colors.blue : null,
+          brightness: Brightness.dark,
+          textTheme: GoogleFonts.robotoTextTheme(ThemeData.dark().textTheme),
+        ),
+        themeMode: ThemeMode.system,
+        home: const StoryList(),
+      );
+    });
   }
 }

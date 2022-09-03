@@ -67,7 +67,31 @@ class _StoryReaderState extends State<StoryReader> {
           itemCount: 50,
         ),
         collapsed: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () async {
+                controller.future.then((value) async {
+                  if (await value.canGoBack()) {
+                    await value.goBack();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('No page in history')),
+                    );
+                    return;
+                  }
+                });
+              },
+            ),
+            IconButton(
+                onPressed: () {
+                  controller.future.then((value) {
+                    value.reload();
+                  });
+                },
+                icon: const Icon(Icons.replay)),
             IconButton(
                 onPressed: () {
                   bsbController.expand();
