@@ -67,11 +67,10 @@ class _StoryListState extends State<StoryList> {
                   onTap: () {
                     if (topStories[index].type == "story") {
                       Get.to(
-                              () => StoryReader(
-                            item: topStories[index],
-                          ),
-                          transition: Transition.rightToLeft
-                      );
+                          () => StoryReader(
+                                item: topStories[index],
+                              ),
+                          transition: Transition.rightToLeft);
                     }
                   },
                 );
@@ -84,9 +83,9 @@ class _StoryListState extends State<StoryList> {
                     child: Row(
                       children: [
                         const Padding(
-                          padding: EdgeInsets.fromLTRB(8, 0, 24, 0),
+                          padding: EdgeInsets.fromLTRB(4, 0, 24, 0),
                           child: SkeletonLine(
-                            style: SkeletonLineStyle(height: 25, width: 25),
+                            style: SkeletonLineStyle(height: 25, width: 25, borderRadius: BorderRadius.all(Radius.circular(25))),
                           ),
                         ),
                         Expanded(
@@ -102,6 +101,7 @@ class _StoryListState extends State<StoryList> {
                               SkeletonLine(
                                 style: SkeletonLineStyle(
                                   height: 10,
+                                  width: 200,
                                   padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
                                 ),
                               ),
