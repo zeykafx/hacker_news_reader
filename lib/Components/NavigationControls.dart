@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NavigationControls extends StatelessWidget {
-  const NavigationControls({Key? key, required this.controller}) : super(key: key);
+  const NavigationControls({Key? key, required this.controller, required this.readerModeCallback}) : super(key: key);
 
   final Completer<WebViewController> controller;
+  final Function readerModeCallback;
 
   @override
   Widget build(BuildContext context) {

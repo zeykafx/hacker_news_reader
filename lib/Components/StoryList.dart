@@ -42,78 +42,93 @@ class _StoryListState extends State<StoryList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Hacker News Reader"),
-      ),
+      // appBar: AppBar(
+      //   title: const Text("Hacker News Reader"),
+      // ),
       body: Center(
           child: RefreshIndicator(
         onRefresh: () async {
           refreshData();
         },
-        child: ListView.builder(
-            itemCount: LIST_LENGTH,
-            itemBuilder: (context, index) {
-              // build all the stories for which we have data
-              if (index < topStories.length) {
-                return ListTile(
-                  leading: Text("${index + 1}"),
-                  title: Text(topStories[index].title),
-                  subtitle: Text("${topStories[index].by} - ${Uri.parse(topStories[index].url).host} - ${topStories[index].score} points"),
-                  trailing: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [const Icon(Icons.comment), Text("${topStories[index].kids.length}")],
-                  ),
-                  onTap: () {
-                    if (topStories[index].type == "story") {
-                      Get.to(
-                          () => StoryReader(
-                                item: topStories[index],
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4, 24, 4, 0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text("Top Stories"),
+              Expanded(
+                  child: ListView.builder(
+                      itemCount: LIST_LENGTH,
+                      itemBuilder: (context, index) {
+                        // build all the stories for which we have data
+                        if (index < topStories.length) {
+                          return ListTile(
+                            leading: Text("${index + 1}"),
+                            horizontalTitleGap: 0,
+                            title: Text(topStories[index].title, style: const TextStyle(fontWeight: FontWeight.w600)),
+                            subtitle: Row(
+                              children: [
+                                Text("${topStories[index].by} - ${Uri.parse(topStories[index].url).host} - ${topStories[index].score} points"),
+                              ],
+                            ),
+                            trailing: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [const Icon(Icons.comment), Text("${topStories[index].kids.length}")],
+                            ),
+                            onTap: () {
+                              if (topStories[index].type == "story") {
+                                Get.to(
+                                    () => StoryReader(
+                                          item: topStories[index],
+                                        ),
+                                    transition: Transition.rightToLeft);
+                              }
+                            },
+                          );
+                        }
+                        // otherwise build a skeleton that vaguely ressembles the ListTile
+                        else {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
+                            child: SkeletonItem(
+                              child: Row(
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.fromLTRB(4, 0, 24, 0),
+                                    child: SkeletonLine(
+                                      style: SkeletonLineStyle(height: 25, width: 25, borderRadius: BorderRadius.all(Radius.circular(25))),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: const [
+                                        SkeletonLine(
+                                          style: SkeletonLineStyle(
+                                            height: 10,
+                                            padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
+                                          ),
+                                        ),
+                                        SkeletonLine(
+                                          style: SkeletonLineStyle(
+                                            height: 10,
+                                            width: 200,
+                                            padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                          transition: Transition.rightToLeft);
-                    }
-                  },
-                );
-              }
-              // otherwise build a skeleton that vaguely ressembles the ListTile
-              else {
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
-                  child: SkeletonItem(
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(4, 0, 24, 0),
-                          child: SkeletonLine(
-                            style: SkeletonLineStyle(height: 25, width: 25, borderRadius: BorderRadius.all(Radius.circular(25))),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: const [
-                              SkeletonLine(
-                                style: SkeletonLineStyle(
-                                  height: 10,
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
-                                ),
-                              ),
-                              SkeletonLine(
-                                style: SkeletonLineStyle(
-                                  height: 10,
-                                  width: 200,
-                                  padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            }),
+                            ),
+                          );
+                        }
+                      })),
+            ],
+          ),
+        ),
       )),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text("Refresh"),

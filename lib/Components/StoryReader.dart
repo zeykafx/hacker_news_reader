@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bottom_sheet_bar/bottom_sheet_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../models/item.dart';
@@ -29,6 +30,8 @@ class _StoryReaderState extends State<StoryReader> {
     super.initState();
   }
 
+  bool isReaderMode = false;
+
   bool isLocked = false;
   bool isCollapsed = true;
   bool isExpanded = false;
@@ -48,13 +51,27 @@ class _StoryReaderState extends State<StoryReader> {
     }
   }
 
+  void readerModeToggle() {
+    String newUrl = widget.item.url;
+
+    if (!isReaderMode) {
+      newUrl = "https://mercury.postlight.com/amp?url=${widget.item.url}";
+      setState(() {
+        isReaderMode = !isReaderMode;
+      });
+    }
+    controller.future.then((value) {
+      value.loadUrl(newUrl);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.item.title),
         actions: [
-          NavigationControls(controller: controller),
+          NavigationControls(controller: controller, readerModeCallback: readerModeToggle),
         ],
       ),
       body: BottomSheetBar(
@@ -77,10 +94,7 @@ class _StoryReaderState extends State<StoryReader> {
                   if (await value.canGoBack()) {
                     await value.goBack();
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('No page in history')),
-                    );
-                    return;
+                    Get.back();
                   }
                 });
               },
@@ -97,6 +111,8 @@ class _StoryReaderState extends State<StoryReader> {
                   bsbController.expand();
                 },
                 icon: const Icon(Icons.arrow_upward)),
+            // reader mode icon
+            IconButton(onPressed: () => readerModeToggle(), icon: const Icon(Icons.text_snippet_outlined))
             // TODO: add a dark mode button somehow
             // IconButton(
             //     onPressed: () {
@@ -112,6 +128,7 @@ class _StoryReaderState extends State<StoryReader> {
             if (widget.item.url != "")
               WebView(
                 initialUrl: widget.item.url,
+                javascriptMode: JavascriptMode.unrestricted,
                 onWebViewCreated: (webViewController) {
                   controller.complete(webViewController);
                 },
