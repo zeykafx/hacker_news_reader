@@ -115,12 +115,13 @@ class _StoryListState extends State<StoryList> {
               }
             }),
       )),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text("Refresh"),
         onPressed: () {
           refreshData();
         },
         tooltip: 'Refresh',
-        child: const Icon(Icons.refresh),
+        icon: const Icon(Icons.refresh),
       ),
     );
   }
