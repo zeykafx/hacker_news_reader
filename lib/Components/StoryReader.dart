@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bottom_sheet_bar/bottom_sheet_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import 'package:hacker_news_reader/Api/HackerNewsApi.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../models/item.dart';
@@ -12,7 +15,9 @@ import 'NavigationControls.dart';
 class StoryReader extends StatefulWidget {
   final Item item;
 
-  const StoryReader({Key? key, required this.item}) : super(key: key);
+  final Function callback;
+
+  const StoryReader({Key? key, required this.item, required this.callback}) : super(key: key);
 
   @override
   _StoryReaderState createState() => _StoryReaderState();
@@ -22,12 +27,21 @@ class _StoryReaderState extends State<StoryReader> {
   int loadingPercentage = 0;
 
   Completer<WebViewController> controller = Completer<WebViewController>();
+  HackerNewsApi api = HackerNewsApi();
 
   @override
   void initState() {
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
     bsbController.addListener(onBsbChanged);
     super.initState();
+
+    for (int i = 0; i < widget.item.kids.length; i++) {
+      bool gotComments = api.getComments(widget.item, widget.callback);
+
+      if (!gotComments) {
+        log("Failed to get comment's comments", level: 1);
+      }
+    }
   }
 
   bool isReaderMode = false;
@@ -80,8 +94,21 @@ class _StoryReaderState extends State<StoryReader> {
         locked: isLocked,
         expandedBuilder: (scrollController) => ListView.builder(
           controller: scrollController,
-          itemBuilder: (context, index) => ListTile(title: Text(index.toString())),
-          itemCount: 50,
+          itemBuilder: (context, index) {
+            Item item = widget.item.comments[index];
+            return ListTile(
+                title: Html(data: item.text),
+                subtitle: Column(children: [
+                  if (item.comments != [])
+                    for (Item comment in item.comments)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: ListTile(title: Html(data: comment.text)),
+                      ),
+                ],)
+            );
+          },
+          itemCount: widget.item.comments.length,
         ),
         collapsed: Row(
           mainAxisAlignment: MainAxisAlignment.center,

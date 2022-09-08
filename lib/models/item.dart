@@ -28,5 +28,25 @@ class Item {
 
   String text;
 
+  bool read = false;
+
+  List<Item> comments = [];
+
   Item(this.id, this.by, this.descendants, this.kids, this.score, this.time, this.title, this.type, this.url, this.text);
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> jsonMap = {
+      "id": id,
+      "by": by,
+      "descendants":descendants,
+      "kids": kids,
+      "score":score,
+      "time":time,
+      "title":title,
+      "type":type,
+      "url":url,
+      "text":text,
+    };
+    return jsonMap;
+  }
 }

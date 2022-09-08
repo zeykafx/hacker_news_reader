@@ -55,7 +55,17 @@ class _StoryListState extends State<StoryList> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Text("Top Stories"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Top Stories"),
+                  IconButton(
+                      onPressed: () {
+                        print("hello");
+                      },
+                      icon: Icon(Icons.search))
+                ],
+              ),
               Expanded(
                   child: ListView.builder(
                       itemCount: LIST_LENGTH,
@@ -63,6 +73,7 @@ class _StoryListState extends State<StoryList> {
                         // build all the stories for which we have data
                         if (index < topStories.length) {
                           return ListTile(
+                            textColor: topStories[index].read ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyText1!.color,
                             leading: Text("${index + 1}"),
                             horizontalTitleGap: 0,
                             title: Text(topStories[index].title, style: const TextStyle(fontWeight: FontWeight.w600)),
@@ -78,9 +89,17 @@ class _StoryListState extends State<StoryList> {
                             ),
                             onTap: () {
                               if (topStories[index].type == "story") {
+                                setState(() {
+                                  topStories[index].read = true;
+                                });
                                 Get.to(
                                     () => StoryReader(
                                           item: topStories[index],
+                                        callback: (Item newComment) {
+                                            setState(() {
+                                              topStories[index].comments.add(newComment);
+                                            });
+                                        },
                                         ),
                                     transition: Transition.rightToLeft);
                               }

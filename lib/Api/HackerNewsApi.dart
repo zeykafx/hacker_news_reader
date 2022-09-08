@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import '../models/item.dart';
 
@@ -32,6 +33,37 @@ class HackerNewsApi {
   /// submitted:    List of the user's stories polls and comments.
   String userLink = "https://hacker-news.firebaseio.com/v0/user";
 
+  bool getComments(Item item, Function callback) {
+    for (int kid in item.kids) {
+      try {
+        Dio().get("$itemLink/$kid.json").then((Response itemResponse) {
+          Item newItem = Item(
+              itemResponse.data["id"] ?? 0,
+              itemResponse.data["by"] ?? "No Username",
+              itemResponse.data['descendants'] ?? 0,
+              (itemResponse.data["kids"] != null ? itemResponse.data["kids"] as List : []).map((e) => e as int).toList(),
+              itemResponse.data["score"] ?? 0,
+              itemResponse.data["time"],
+              itemResponse.data["title"] ?? "No title",
+              itemResponse.data["type"] ?? "story",
+              itemResponse.data["url"] ?? "",
+              itemResponse.data["text"] ?? "");
+          if (newItem.kids != null && newItem.kids != []) {
+            bool gotComments = getComments(newItem, callback);
+            if (!gotComments) {
+              log("Failed to get comment's comments", level: 1);
+            }
+          }
+          callback(newItem);
+        });
+      } catch (e) {
+        print(e);
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<void> getTopStories(int maxStoriesToFetch, Function(Item) callback) async {
     int storiesFetched = 0;
 
@@ -40,20 +72,21 @@ class HackerNewsApi {
       for (int id in response.data) {
         if (storiesFetched <= maxStoriesToFetch) {
           try {
-            Response itemResponse = await Dio().get("$itemLink/$id.json");
-            Item item = Item(
-                itemResponse.data["id"] ?? 0,
-                itemResponse.data["by"] ?? "No Username",
-                itemResponse.data['descendants'] ?? 0,
-                (itemResponse.data["kids"] != null ? itemResponse.data["kids"] as List : []).map((e) => e as int).toList(),
-                itemResponse.data["score"] ?? 0,
-                itemResponse.data["time"],
-                itemResponse.data["title"] ?? "No title",
-                itemResponse.data["type"] ?? "story",
-                itemResponse.data["url"] ?? "",
-                itemResponse.data["text"] ?? "");
-            callback(item);
-            storiesFetched++;
+            Dio().get("$itemLink/$id.json").then((Response itemResponse) {
+              Item item = Item(
+                  itemResponse.data["id"] ?? 0,
+                  itemResponse.data["by"] ?? "No Username",
+                  itemResponse.data['descendants'] ?? 0,
+                  (itemResponse.data["kids"] != null ? itemResponse.data["kids"] as List : []).map((e) => e as int).toList(),
+                  itemResponse.data["score"] ?? 0,
+                  itemResponse.data["time"],
+                  itemResponse.data["title"] ?? "No title",
+                  itemResponse.data["type"] ?? "story",
+                  itemResponse.data["url"] ?? "",
+                  itemResponse.data["text"] ?? "");
+              callback(item);
+              storiesFetched++;
+            });
           } catch (e) {
             print(id);
             print(e);
