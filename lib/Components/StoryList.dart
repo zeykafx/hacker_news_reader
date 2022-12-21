@@ -63,7 +63,7 @@ class _StoryListState extends State<StoryList> {
                       onPressed: () {
                         print("hello");
                       },
-                      icon: Icon(Icons.search))
+                      icon: const Icon(Icons.search))
                 ],
               ),
               Expanded(
@@ -95,11 +95,11 @@ class _StoryListState extends State<StoryList> {
                                 Get.to(
                                     () => StoryReader(
                                           item: topStories[index],
-                                        callback: (Item newComment) {
+                                          callback: (Item newComment) {
                                             setState(() {
                                               topStories[index].comments.add(newComment);
                                             });
-                                        },
+                                          },
                                         ),
                                     transition: Transition.rightToLeft);
                               }

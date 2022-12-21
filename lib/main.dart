@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hacker_news_reader/Components/StoryList.dart';
 import 'package:get_storage/get_storage.dart';
 
-main() async {
+Future<void> main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const HackerNewsReaderApp());
@@ -24,14 +24,14 @@ class HackerNewsReaderApp extends StatelessWidget {
           colorScheme: lightColorScheme,
           colorSchemeSeed: lightColorScheme == null ? Colors.blue : null,
           brightness: Brightness.light,
-          textTheme: GoogleFonts.robotoTextTheme(ThemeData.light().textTheme),
+          // textTheme: GoogleFonts.robotoTextTheme(ThemeData.light().textTheme),
         ),
         darkTheme: ThemeData(
           useMaterial3: true,
           colorScheme: darkColorScheme,
           colorSchemeSeed: darkColorScheme == null ? Colors.blue : null,
           brightness: Brightness.dark,
-          textTheme: GoogleFonts.robotoTextTheme(ThemeData.dark().textTheme),
+          // textTheme: GoogleFonts.robotoTextTheme(ThemeData.dark().textTheme),
         ),
         themeMode: ThemeMode.system,
         home: const StoryList(),
